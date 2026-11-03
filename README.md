@@ -1,53 +1,44 @@
-# Carl — Yapper website
+# Carl — Yapper website (`carl-yapin.best`)
 
-A multi-page Cloudflare Pages starter for `carl-yapin.lol`, with a dark/light green theme and a real homepage media uploader backed by Cloudflare R2.
+Multi-page Cloudflare Pages site for Carl, a multipurpose moderation and community bot built for Yapper.
+Black + emerald design system, dark/light themes, and a real homepage-media uploader backed by Cloudflare R2.
 
-## What's included
+## Pages
+`index.html` · `features.html` · `commands.html` · `docs.html` · `status.html` · `dashboard.html` · `admin.html`
 
-- Home, Features, Commands, Docs, Status, Dashboard, and Admin pages.
-- Dark / light theme toggle (saved in the browser).
-- Responsive mobile navigation and layout.
-- Admin-only homepage image upload and removal (GIF, PNG, JPG, WebP; max 8 MB).
-- Cloudflare Pages Functions API and R2 object storage.
+## Brand assets (`assets/`)
+| File | Use |
+| --- | --- |
+| `carl.svg` | Master logo — navbar, footer, loader, dashboard, SVG favicon |
+| `carl.png` | PNG logo — apple-touch-icon and social previews |
+| `favicon.ico` | Browser tab icon (generated from `carl.png`, 16–256 px) |
+| `homehero.gif` | Animated homepage hero (default). Stays animated. |
 
-## Important honesty note
+The hero shows the image uploaded in `admin.html` (stored in R2) if one exists, otherwise `assets/homehero.gif`.
+`homehero.gif` is ~4.4 MB; compressing it would speed up first load.
 
-The website dashboard is currently a **front-end preview**. It is not yet connected to your Yapper bot's live server settings, OAuth, or command handlers. The command examples are explicitly examples. The R2-backed homepage image uploader is implemented once deployed with the configuration below.
+## What is real and what is not
+- **Real:** theme toggle, navigation, searchable command directory, admin sign-in/upload/remove, `/api/status` checks.
+- **Not connected:** the dashboard is a front-end preview. It never saves to the bot. "Save local draft" stores text in the visitor's own browser only.
+- **Unverified:** the command list and `c!` prefix come from the previous site and are labelled as unverified examples. Replace `js/commands-data.js` with the real list and set `verified: true`.
+- **Invite link:** not configured. Set `inviteUrl` in `js/config.js`; until then "Add Carl" opens the docs invite section.
+- **Status:** shows only real checks. Bot status appears only if `BOT_STATUS_URL` is set. No uptime or latency numbers are invented.
 
 ## Deploy on Cloudflare Pages
-
-1. Create an R2 bucket named `carl-website-media` in Cloudflare.
-2. Upload this folder to a Git repository, or deploy it using the Cloudflare Pages upload flow that supports Functions. **A plain drag-and-drop static upload may not deploy Pages Functions.** Use Git integration or Wrangler Pages deployment.
-3. In Cloudflare Pages, create a project and set the build output directory to `.`. No build command is required.
-4. Add a Pages R2 binding:
-   - Variable name: `CARL_MEDIA`
-   - R2 bucket: `carl-website-media`
-5. Add an environment variable:
-   - `ADMIN_PASSWORD` = a long, unique password (keep it private).
-6. Deploy, then open `https://carl-yapin.lol/admin.html`, enter the password, and upload your homepage GIF.
-
-## Deploy with Wrangler
-
-Install Wrangler and authenticate with your Cloudflare account, then run:
-
-```bash
-npx wrangler pages deploy . --project-name carl-yapin-website
-```
-
-Configure the R2 binding and `ADMIN_PASSWORD` in the Pages project settings as described above. `wrangler.toml` documents the binding for Wrangler-compatible workflows; verify the Pages project binding in its dashboard.
-
-## Security notes
-
-- Never put your Yapper bot token in frontend JavaScript or HTML.
-- Keep `ADMIN_PASSWORD` only in Cloudflare Pages environment variables.
-- Use a unique password. The browser holds it in page memory only while the admin page is open; it is not written to local storage.
-- For a production admin system, replace the shared password with Cloudflare Access or a proper authenticated identity flow and add rate limiting.
+1. Create an R2 bucket `carl-website-media`.
+2. Deploy with Git integration or `npx wrangler pages deploy . --project-name carl-yapin-website` (plain drag-and-drop may not deploy Functions).
+3. Pages project settings:
+   - R2 binding: `CARL_MEDIA` -> `carl-website-media`
+   - Secret `ADMIN_PASSWORD`: long, unique
+   - Optional `BOT_STATUS_URL`: HTTPS endpoint returning `200`; optional JSON `{ "online": true, "servers": 0, "users": 0 }`
+4. Open `/admin.html`, sign in, upload a hero image.
 
 ## Customize
+- Design tokens (colors, type, themes): `css/main.css`
+- Invite URL: `js/config.js`
+- Commands: `js/commands-data.js`
+- Pages share the same header/footer markup, so edit navigation in each HTML file.
 
-- Colors and layout: `css/main.css`
-- Homepage text: `index.html`
-- Brand mark: `assets/carl-mark.svg`
-- Theme behavior: `js/theme.js`
-- Homepage uploader: `admin.html`, `js/admin.js`, `functions/api/`
-- Add your actual Yapper invite URL and exact command list before publishing.
+## Security
+- Never put a bot token in front-end files.
+- The admin password lives in memory only while the page is open. For production use Cloudflare Access on `/admin.html` and add rate limiting.

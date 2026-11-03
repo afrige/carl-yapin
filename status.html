@@ -1,1 +1,75 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Status — Carl</title><link rel="stylesheet" href="/css/main.css"><script defer src="/js/theme.js"></script><script defer src="/js/site.js"></script></head><body><header class="topbar"><a class="brand" href="/"><img src="/assets/carl-mark.svg" width="34" height="34" alt=""><span>carl<span class="green">.</span></span></a><nav><a href="/">Home</a><a href="/features.html">Features</a><a href="/commands.html">Commands</a><a href="/docs.html">Docs</a><a class="active" href="/status.html">Status</a></nav><div class="top-actions"><button class="theme-toggle" data-theme-toggle>◐</button><a class="button button-small" href="/dashboard.html">Dashboard ↗</a><button class="menu-toggle">☰</button></div></header><main class="subpage wrap"><div class="eyebrow">SERVICE STATUS</div><h1>All systems<br><span class="green">in view.</span></h1><p class="lead">This page is a static status layout until you connect real uptime monitoring.</p><div class="status-panel"><div class="status-line"><span class="status-indicator"></span><div><b>Website</b><small>Static page is available</small></div><strong>PAGE ONLINE</strong></div><div class="status-line"><span class="status-indicator muted"></span><div><b>Carl bot</b><small>Live bot status is not connected yet</small></div><strong>NOT CONNECTED</strong></div><div class="status-line"><span class="status-indicator muted"></span><div><b>Dashboard API</b><small>Awaiting backend integration</small></div><strong>NOT CONNECTED</strong></div></div></main><footer class="footer wrap"><a class="brand" href="/"><img src="/assets/carl-mark.svg" width="26" height="26" alt=""><span>carl<span class="green">.</span></span></a><span>Made for Yapper communities.</span><div><a href="/docs.html">Docs</a><a href="/admin.html">Admin</a></div></footer></body></html>
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Status — Carl</title>
+<meta name="description" content="Live service status for the Carl website and bot.">
+<meta name="theme-color" content="#050807">
+<link rel="canonical" href="https://carl-yapin.best/status.html">
+<link rel="icon" href="/assets/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/carl.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/carl.png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Carl">
+<meta property="og:title" content="Status — Carl"><meta property="og:description" content="Live service status for the Carl website and bot.">
+<meta property="og:url" content="https://carl-yapin.best/status.html"><meta property="og:image" content="https://carl-yapin.best/assets/carl.png">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Status — Carl"><meta name="twitter:description" content="Live service status for the Carl website and bot."><meta name="twitter:image" content="https://carl-yapin.best/assets/carl.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="/css/main.css">
+<script src="/js/theme.js"></script>
+<script defer src="/js/config.js"></script>
+<script defer src="/js/site.js"></script>
+<script defer src="/js/fx.js"></script>
+<script defer src="/js/status.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="loader" id="loader" role="status" aria-label="Loading Carl">
+  <div class="loader-inner"><div class="loader-logo"><img src="/assets/carl.svg" alt="" width="72" height="72"></div><div class="loader-bar"></div></div>
+</div>
+<div class="ambient" aria-hidden="true"><i></i></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="/" aria-label="Carl — home"><img src="/assets/carl.svg" alt="" width="34" height="34"><span>carl<span class="dot">.</span></span></a>
+    <nav class="nav" id="siteNav" aria-label="Primary"><span class="nav-indicator" aria-hidden="true"></span><a href="/">Home</a><a href="/features.html">Features</a><a href="/commands.html">Commands</a><a href="/docs.html">Docs</a><a href="/status.html" class="active" aria-current="page">Status</a><a href="/dashboard.html">Dashboard</a></nav>
+    <div class="top-actions">
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme"><svg class="ic i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><svg class="ic i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+      <a class="button button-sm" href="/docs.html#invite" data-add-carl>Add Carl <svg class="ic ic-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      <button class="icon-btn menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+
+<section class="wrap page-head">
+  <div class="eyebrow rise">Service status</div>
+  <h1 class="rise" style="--i:1">All systems<br><span class="gradient-text">in view.</span></h1>
+  <p class="lead rise" style="--i:2">Live checks from the Carl website. Nothing on this page is estimated or made up.</p>
+</section>
+<section class="wrap page-body">
+  <div class="status-hero idle reveal" id="statusHero"><div class="big"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div><h2>Checking…</h2><p>Running live checks.</p></div>
+    <div class="spacer"><button class="button button-ghost button-sm" id="refreshBtn" type="button"><svg class="ic ic-refresh" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16M8 16H3v5"/></svg> Refresh</button></div></div>
+  <div class="status-list reveal" id="statusRows" aria-live="polite"><div class="status-row"><span class="status-dot checking"></span><div class="info"><b>Loading</b><small>Contacting the status API…</small></div></div></div>
+  <div class="status-meta" id="statusMeta"></div>
+  <div class="card static reveal" style="margin-top:28px"><h3 style="font-size:18px">Incident history</h3><p class="muted" style="margin-top:8px;font-size:14.5px">No incident feed is connected, so no history is shown. Uptime percentages and latency charts will appear here only once a real monitoring source is connected.</p></div>
+</section>
+</main>
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/carl.svg" alt="" width="34" height="34"><span>carl<span class="dot">.</span></span></a>
+        <p class="about">Multipurpose moderation and community tools, built specifically for Yapper.</p>
+        <a class="pill" href="/status.html" data-status-pill style="margin-top:18px"><span class="status-dot checking"></span><span data-status-text>Checking status…</span></a>
+      </div>
+      <div><h4>Product</h4><ul><li><a href="/features.html">Features</a></li><li><a href="/commands.html">Commands</a></li><li><a href="/dashboard.html">Dashboard</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="/docs.html">Documentation</a></li><li><a href="/docs.html#invite" data-add-carl>Add Carl</a></li><li><a href="/status.html">Status</a></li></ul></div>
+      <div><h4>Site</h4><ul><li><a href="/admin.html">Admin</a></li><li><a href="https://carl-yapin.best">carl-yapin.best</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Carl. Built for Yapper communities.</span><span>Not affiliated with any third-party platform.</span></div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,1 +1,137 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard — Carl</title><link rel="stylesheet" href="/css/main.css"><script defer src="/js/theme.js"></script><script defer src="/js/dashboard.js"></script></head><body><header class="topbar"><a class="brand" href="/"><img src="/assets/carl-mark.svg" width="34" height="34" alt=""><span>carl<span class="green">.</span></span></a><nav><a href="/">Home</a><a href="/features.html">Features</a><a href="/commands.html">Commands</a><a href="/docs.html">Docs</a><a href="/status.html">Status</a></nav><div class="top-actions"><button class="theme-toggle" data-theme-toggle>◐</button><a class="button button-small" href="/admin.html">Admin ↗</a><button class="menu-toggle">☰</button></div></header><main class="subpage wrap"><div class="eyebrow">CONTROL CENTER</div><h1>Your server,<br><span class="green">your settings.</span></h1><p class="lead">The dashboard shell is ready. Connect it to Carl's authenticated Yapper configuration API to save real server settings.</p><div class="notice"><b>Not connected yet</b><p>These controls are a front-end preview only. They do not change your live bot until you implement the API integration.</p></div><div class="dashboard-grid"><section class="panel"><h3>Welcome messages</h3><label>Welcome channel ID<input placeholder="Yapper channel ID"></label><label>Welcome message<textarea placeholder="Welcome {user} to {server}!"></textarea></label><button class="button button-small" data-demo-save>Save preview</button></section><section class="panel"><h3>Moderation</h3><label class="switch-row">Enable moderation tools <input type="checkbox"></label><label class="switch-row">Log moderation actions <input type="checkbox"></label><label>Log channel ID<input placeholder="Yapper channel ID"></label><button class="button button-small" data-demo-save>Save preview</button></section><section class="panel"><h3>Leveling</h3><label class="switch-row">Enable leveling <input type="checkbox"></label><label>Level-up message<textarea placeholder="Congrats {user}, you reached level {level}!"></textarea></label><button class="button button-small" data-demo-save>Save preview</button></section><section class="panel"><h3>Server connection</h3><p class="muted-copy">A real server picker and permission check will appear after the Yapper OAuth/API integration is added.</p><button class="button button-ghost" disabled>Connect Yapper — integration required</button></section></div><p class="form-feedback" id="dashboardFeedback" aria-live="polite"></p></main><footer class="footer wrap"><a class="brand" href="/"><img src="/assets/carl-mark.svg" width="26" height="26" alt=""><span>carl<span class="green">.</span></span></a><span>Dashboard preview</span><div><a href="/docs.html">Docs</a><a href="/admin.html">Admin</a></div></footer></body></html>
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dashboard — Carl</title>
+<meta name="description" content="Preview Carl's server configuration. Not connected to a live bot yet.">
+<meta name="theme-color" content="#050807">
+<link rel="canonical" href="https://carl-yapin.best/dashboard.html">
+<link rel="icon" href="/assets/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/carl.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/carl.png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Carl">
+<meta property="og:title" content="Dashboard — Carl"><meta property="og:description" content="Preview Carl's server configuration. Not connected to a live bot yet.">
+<meta property="og:url" content="https://carl-yapin.best/dashboard.html"><meta property="og:image" content="https://carl-yapin.best/assets/carl.png">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Dashboard — Carl"><meta name="twitter:description" content="Preview Carl's server configuration. Not connected to a live bot yet."><meta name="twitter:image" content="https://carl-yapin.best/assets/carl.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="/css/main.css">
+<script src="/js/theme.js"></script>
+<script defer src="/js/config.js"></script>
+<script defer src="/js/site.js"></script>
+<script defer src="/js/fx.js"></script>
+<script defer src="/js/dashboard.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="loader" id="loader" role="status" aria-label="Loading Carl">
+  <div class="loader-inner"><div class="loader-logo"><img src="/assets/carl.svg" alt="" width="72" height="72"></div><div class="loader-bar"></div></div>
+</div>
+<div class="ambient" aria-hidden="true"><i></i></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="/" aria-label="Carl — home"><img src="/assets/carl.svg" alt="" width="34" height="34"><span>carl<span class="dot">.</span></span></a>
+    <nav class="nav" id="siteNav" aria-label="Primary"><span class="nav-indicator" aria-hidden="true"></span><a href="/">Home</a><a href="/features.html">Features</a><a href="/commands.html">Commands</a><a href="/docs.html">Docs</a><a href="/status.html">Status</a><a href="/dashboard.html" class="active" aria-current="page">Dashboard</a></nav>
+    <div class="top-actions">
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme"><svg class="ic i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><svg class="ic i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+      <a class="button button-sm" href="/docs.html#invite" data-add-carl>Add Carl <svg class="ic ic-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      <button class="icon-btn menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+
+<section class="wrap page-head">
+  <div class="eyebrow rise">Control center</div>
+  <h1 class="rise" style="--i:1">Your server,<br><span class="gradient-text">your settings.</span></h1>
+  <p class="lead rise" style="--i:2">Plan Carl's configuration here. This is a preview: it is not connected to Yapper yet.</p>
+</section>
+<section class="wrap page-body">
+  <div class="notice warn reveal" style="margin-bottom:24px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/></svg><div><b>Preview only — not connected</b><p>Nothing here changes your live bot. “Save local draft” stores your entries in this browser only. Real saving needs Yapper sign-in and an API connected to Carl's configuration.</p></div></div>
+  <div class="dash">
+    <aside class="dash-side">
+      <div class="server-picker" aria-label="Server selection"><span class="sv"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></svg></span><div><b>No server connected</b><small>Server picker needs Yapper sign-in</small></div></div>
+      <div class="dash-nav" role="tablist" aria-label="Dashboard sections">
+        <button type="button" role="tab" data-tab="overview" aria-selected="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg> Overview</button>
+        <button type="button" role="tab" data-tab="welcome" aria-selected="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg> Welcome</button>
+        <button type="button" role="tab" data-tab="moderation" aria-selected="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> Moderation</button>
+        <button type="button" role="tab" data-tab="leveling" aria-selected="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg> Leveling</button>
+        <button type="button" role="tab" data-tab="connection" aria-selected="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22v-5M9 8V2M15 8V2M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg> Connection</button>
+      </div>
+    </aside>
+    <div>
+      <div class="dash-panel active" id="panel-overview" role="tabpanel">
+        <div class="panel-head"><div><h2>Overview</h2><p>Where things stand for this preview.</p></div></div>
+        <div class="card static"><div class="empty"><img src="/assets/carl.svg" alt="" width="84" height="84"><h3>No server selected</h3><p>Once Yapper sign-in is connected, your servers will appear here. Until then you can draft settings in the other tabs.</p><button class="button button-sm" type="button" data-goto="welcome">Start a draft <svg class="ic ic-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div></div>
+        <div class="checklist">
+          <div class="check-item"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div><b>Sign in with Yapper</b><small>Required to list and manage servers</small></div><span class="tag tag-warn">Not connected</span></div>
+          <div class="check-item"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></svg><div><b>Choose a server</b><small>Available after sign-in</small></div><span class="tag">Waiting</span></div>
+          <div class="check-item"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg><div><b>Configure modules</b><small>Draft locally in the tabs on the left</small></div><span class="tag tag-accent">Preview</span></div>
+        </div>
+      </div>
+
+      <div class="dash-panel" id="panel-welcome" role="tabpanel">
+        <div class="panel-head"><div><h2>Welcome messages</h2><p>Greet new members.</p></div><span class="tag tag-warn">Draft only</span></div>
+        <div class="settings-grid">
+          <div class="card static">
+            <div class="field"><label for="welcomeChannel">Welcome channel ID</label><input class="input" id="welcomeChannel" placeholder="Yapper channel ID" autocomplete="off"></div>
+            <div class="field"><label for="welcomeMessage">Welcome message</label><textarea class="textarea" id="welcomeMessage" placeholder="Welcome {user} to {server}!"></textarea><small>Placeholders are unverified samples.</small></div>
+            <div class="actions"><button class="button button-sm" type="button" data-save-draft>Save local draft</button><button class="button button-ghost button-sm" type="button" data-clear-draft>Clear draft</button></div>
+          </div>
+          <div class="card static preview-card"><h3>Preview (sample data)</h3><div class="msg"><img src="/assets/carl.svg" alt="" width="38" height="38"><div><div class="who">Carl <span class="tag">Bot</span></div><div class="body" id="welcomePreview"></div></div></div></div>
+        </div>
+      </div>
+
+      <div class="dash-panel" id="panel-moderation" role="tabpanel">
+        <div class="panel-head"><div><h2>Moderation</h2><p>Safeguards and action logging.</p></div><span class="tag tag-warn">Draft only</span></div>
+        <div class="settings-grid">
+          <div class="card static">
+            <div class="toggle-row"><div><b>Enable moderation tools</b><small>Turn moderation features on or off</small></div><label class="switch"><input type="checkbox" id="modEnabled" aria-label="Enable moderation tools"><span></span></label></div>
+            <div class="toggle-row"><div><b>Log moderation actions</b><small>Record actions for your team to review</small></div><label class="switch"><input type="checkbox" id="modLog" aria-label="Log moderation actions"><span></span></label></div>
+            <div class="field" style="margin-top:18px"><label for="logChannel">Log channel ID</label><input class="input" id="logChannel" placeholder="Yapper channel ID" autocomplete="off"></div>
+            <div class="actions"><button class="button button-sm" type="button" data-save-draft>Save local draft</button><button class="button button-ghost button-sm" type="button" data-clear-draft>Clear draft</button></div>
+          </div>
+          <div class="card static preview-card"><h3>Summary</h3><p id="modSummary" style="font-size:14.5px"></p></div>
+        </div>
+      </div>
+
+      <div class="dash-panel" id="panel-leveling" role="tabpanel">
+        <div class="panel-head"><div><h2>Leveling</h2><p>Reward participation.</p></div><span class="tag tag-warn">Draft only</span></div>
+        <div class="settings-grid">
+          <div class="card static">
+            <div class="toggle-row"><div><b>Enable leveling</b><small>Track activity and award levels</small></div><label class="switch"><input type="checkbox" id="levelEnabled" aria-label="Enable leveling"><span></span></label></div>
+            <div class="field" style="margin-top:18px"><label for="levelMessage">Level-up message</label><textarea class="textarea" id="levelMessage" placeholder="Congrats {user}, you reached level {level}!"></textarea><small>Placeholders are unverified samples.</small></div>
+            <div class="actions"><button class="button button-sm" type="button" data-save-draft>Save local draft</button><button class="button button-ghost button-sm" type="button" data-clear-draft>Clear draft</button></div>
+          </div>
+          <div class="card static preview-card"><h3>Preview (sample data)</h3><div class="msg"><img src="/assets/carl.svg" alt="" width="38" height="38"><div><div class="who">Carl <span class="tag">Bot</span></div><div class="body" id="levelPreview"></div></div></div></div>
+        </div>
+      </div>
+
+      <div class="dash-panel" id="panel-connection" role="tabpanel">
+        <div class="panel-head"><div><h2>Connection</h2><p>Link this dashboard to Yapper.</p></div></div>
+        <div class="card static"><div class="empty"><span class="feature-icon" style="width:56px;height:56px;font-size:26px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22v-5M9 8V2M15 8V2M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg></span><h3>Yapper integration required</h3><p>A real server picker and permission check will appear here once Yapper sign-in and the configuration API are added.</p><button class="button button-ghost" type="button" disabled>Connect Yapper — unavailable</button></div></div>
+      </div>
+      <p class="feedback" id="dashboardFeedback" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="/"><img src="/assets/carl.svg" alt="" width="34" height="34"><span>carl<span class="dot">.</span></span></a>
+        <p class="about">Multipurpose moderation and community tools, built specifically for Yapper.</p>
+        <a class="pill" href="/status.html" data-status-pill style="margin-top:18px"><span class="status-dot checking"></span><span data-status-text>Checking status…</span></a>
+      </div>
+      <div><h4>Product</h4><ul><li><a href="/features.html">Features</a></li><li><a href="/commands.html">Commands</a></li><li><a href="/dashboard.html">Dashboard</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="/docs.html">Documentation</a></li><li><a href="/docs.html#invite" data-add-carl>Add Carl</a></li><li><a href="/status.html">Status</a></li></ul></div>
+      <div><h4>Site</h4><ul><li><a href="/admin.html">Admin</a></li><li><a href="https://carl-yapin.best">carl-yapin.best</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Carl. Dashboard preview.</span><span>Not affiliated with any third-party platform.</span></div>
+  </div>
+</footer>
+</body>
+</html>
