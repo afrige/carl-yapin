@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{const feedback=document.querySelector("#dashboardFeedback");document.querySelectorAll("[data-demo-save]").forEach(btn=>btn.addEventListener("click",()=>{feedback.textContent="Preview only — connect the dashboard API to save live settings."; }));});
