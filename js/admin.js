@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
   var $ = function (s) { return document.querySelector(s); };
-  var DEFAULT_SRC = "/assets/homehero.gif", MAX = 8 * 1024 * 1024;
+  var DEFAULT_SRC = "/assets/homehero.gif", MAX = 4 * 1024 * 1024;
   var TYPES = ["image/gif", "image/png", "image/jpeg", "image/webp"];
   var password = "", file = null, objectUrl = null, busy = false, hasCustom = false;
 
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return fetch("/api/hero", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }).then(function (d) {
       hasCustom = !!(d && d.url);
       preview.querySelector("img").src = hasCustom ? d.url : DEFAULT_SRC;
-      badge.textContent = hasCustom ? "Custom · stored in R2" : "Default · bundled homehero.gif";
+      badge.textContent = hasCustom ? "Custom · stored in Vercel Blob" : "Default · bundled homehero.gif";
       badge.className = "tag badge " + (hasCustom ? "tag-accent" : "");
       rmBtn.disabled = !hasCustom || busy;
     });
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (objectUrl) { URL.revokeObjectURL(objectUrl); objectUrl = null; }
     if (!f) { file = null; info.hidden = true; upBtn.disabled = true; return; }
     if (TYPES.indexOf(f.type) === -1) { file = null; info.hidden = true; upBtn.disabled = true; say(upFb, "Only GIF, PNG, JPG, and WebP images are allowed.", true); return; }
-    if (f.size > MAX) { file = null; info.hidden = true; upBtn.disabled = true; say(upFb, "That file is " + size(f.size) + ". The maximum is 8 MB.", true); return; }
+    if (f.size > MAX) { file = null; info.hidden = true; upBtn.disabled = true; say(upFb, "That file is " + size(f.size) + ". The maximum is 4 MB.", true); return; }
     file = f; objectUrl = URL.createObjectURL(f);
     info.querySelector("img").src = objectUrl;
     info.querySelector("b").textContent = f.name;
@@ -48,9 +48,9 @@ document.addEventListener("DOMContentLoaded", function () {
       if (r.ok) { loginArea.hidden = true; studio.hidden = false; say(loginFb, ""); return loadCurrent(); }
       password = "";
       return r.json().catch(function () { return {}; }).then(function (d) {
-        say(loginFb, r.status === 503 ? "ADMIN_PASSWORD is not configured in Cloudflare Pages." : "That password did not work.", true);
+        say(loginFb, r.status === 503 ? "ADMIN_PASSWORD is not configured in Vercel." : "That password did not work.", true);
       });
-    }).catch(function () { password = ""; say(loginFb, "Could not reach the admin API. It only runs on a deployed Cloudflare Pages site.", true); });
+    }).catch(function () { password = ""; say(loginFb, "Could not reach the admin API. It only runs on a deployed Vercel site.", true); });
   }
   $("#loginButton").addEventListener("click", signIn);
   pw.addEventListener("keydown", function (e) { if (e.key === "Enter") signIn(); });

@@ -660,3 +660,18 @@ html.js .reveal.in { opacity: 1; transform: none; }
   html.js .reveal { opacity: 1; transform: none; }
   #fx { display: none; }
 }
+
+/* dashboard auth + user */
+.user-chip { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+.user-chip:hover { transform: none; box-shadow: none; }
+.user-chip b { display: block; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px; }
+.user-chip small { color: var(--muted); font-size: 12px; }
+.avatar { width: 38px; height: 38px; border-radius: 12px; flex: none; display: grid; place-items: center; font: 700 15px var(--font-display); color: var(--accent-text); background: var(--accent-soft) center / cover no-repeat; border: 1px solid var(--accent-line); }
+.server-select select { appearance: auto; }
+.status-row .info small.err { color: var(--danger); }
+
+/* overflow safety */
+html { overflow-x: clip; }
+.docs-layout > *, .dash > *, .hero-grid > *, .split > *, .settings-grid > *, .studio > * { min-width: 0; }
+.prose { overflow-wrap: anywhere; }
+.kv dd, .kv dt { min-width: 0; overflow-wrap: anywhere; }

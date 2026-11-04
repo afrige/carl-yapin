@@ -1,44 +1,50 @@
 # Carl — Yapper website (`carl-yapin.best`)
 
-Multi-page Cloudflare Pages site for Carl, a multipurpose moderation and community bot built for Yapper.
-Black + emerald design system, dark/light themes, and a real homepage-media uploader backed by Cloudflare R2.
+Multi-page site for Carl, a multipurpose moderation and community bot built for Yapper.
+Black + emerald design system, dark/light themes, Yapin login for the dashboard, live status, and a homepage-image uploader.
+Hosted on **Vercel**, deployed from **GitHub**. Static pages at the repo root; server code in `api/` (Vercel Functions).
 
 ## Pages
 `index.html` · `features.html` · `commands.html` · `docs.html` · `status.html` · `dashboard.html` · `admin.html`
 
 ## Brand assets (`assets/`)
-| File | Use |
-| --- | --- |
-| `carl.svg` | Master logo — navbar, footer, loader, dashboard, SVG favicon |
-| `carl.png` | PNG logo — apple-touch-icon and social previews |
-| `favicon.ico` | Browser tab icon (generated from `carl.png`, 16–256 px) |
-| `homehero.gif` | Animated homepage hero (default). Stays animated. |
+`carl.svg` (master logo) · `carl.png` · `favicon.ico` · `homehero.gif` (animated hero, ~4.4 MB — compressing it would speed up first load).
+The hero shows the image uploaded in `admin.html` if one exists, otherwise `assets/homehero.gif`.
 
-The hero shows the image uploaded in `admin.html` (stored in R2) if one exists, otherwise `assets/homehero.gif`.
-`homehero.gif` is ~4.4 MB; compressing it would speed up first load.
+## Deploy (GitHub → Vercel → your domain)
+1. Push this folder's contents to the **root** of a GitHub repo (`api/` next to `index.html`).
+2. vercel.com → Add New → Project → import the repo. Framework preset **Other**; no build command; leave output directory empty.
+3. Project → **Storage** → create a **Blob** store and connect it (this adds `BLOB_READ_WRITE_TOKEN` automatically; needed for the admin image uploader).
+4. Project → Settings → **Environment Variables** (mark secrets Sensitive), then redeploy:
+
+| Name | Value |
+| --- | --- |
+| `YAPPER_CLIENT_SECRET` | from your Yapin app page (secret) |
+| `YAPPER_TOKEN_URL` | Yapin's token endpoint |
+| `YAPPER_USER_URL` | Yapin's endpoint returning the signed-in user as JSON |
+| `SESSION_SECRET` | long random string: `openssl rand -base64 48` |
+| `ADMIN_PASSWORD` | long, unique |
+| `SITE_URL` | `https://carl-yapin.best` (recommended) |
+| `BOT_STATUS_URL` | optional HTTPS endpoint for live bot status; JSON `{ "online": true, "servers": 0, "users": 0 }` |
+| `YAPPER_SERVERS_URL` | optional, enables the server picker |
+
+   Already defaulted in code (override only if needed): `YAPPER_CLIENT_ID`, `YAPPER_AUTH_URL` (`https://www.yapin.gg/oauth/authorize`), `YAPPER_SCOPES` (`identify`).
+5. Project → Settings → **Domains** → add `carl-yapin.best` (and `www.carl-yapin.best`). Vercel shows the exact DNS records to set at your registrar. You keep your domain; nothing is transferred.
+6. In your Yapin app settings, set the redirect URL to `https://carl-yapin.best/api/auth/callback`.
+
+Never commit secrets. For local testing: `npm i -g vercel`, `vercel link`, `vercel env pull .env.local`, `vercel dev` (`.env*` is git-ignored).
 
 ## What is real and what is not
-- **Real:** theme toggle, navigation, searchable command directory, admin sign-in/upload/remove, `/api/status` checks.
-- **Not connected:** the dashboard is a front-end preview. It never saves to the bot. "Save local draft" stores text in the visitor's own browser only.
-- **Unverified:** the command list and `c!` prefix come from the previous site and are labelled as unverified examples. Replace `js/commands-data.js` with the real list and set `verified: true`.
-- **Invite link:** not configured. Set `inviteUrl` in `js/config.js`; until then "Add Carl" opens the docs invite section.
+- **Real:** theme toggle, searchable commands, Yapin login (OAuth2 code + PKCE, signed HttpOnly session), live `/api/status` checks, admin sign-in/upload/remove.
+- **Not connected:** saving dashboard settings to the bot. Drafts are stored only in the visitor's browser, and the UI says so.
+- **Unverified:** the command list and `c!` prefix are the previous site's examples, labelled as unverified. Edit `js/commands-data.js`.
 - **Status:** shows only real checks. Bot status appears only if `BOT_STATUS_URL` is set. No uptime or latency numbers are invented.
+- **Upload limit:** 4 MB (Vercel request-body limit).
 
-## Deploy on Cloudflare Pages
-1. Create an R2 bucket `carl-website-media`.
-2. Deploy with Git integration or `npx wrangler pages deploy . --project-name carl-yapin-website` (plain drag-and-drop may not deploy Functions).
-3. Pages project settings:
-   - R2 binding: `CARL_MEDIA` -> `carl-website-media`
-   - Secret `ADMIN_PASSWORD`: long, unique
-   - Optional `BOT_STATUS_URL`: HTTPS endpoint returning `200`; optional JSON `{ "online": true, "servers": 0, "users": 0 }`
-4. Open `/admin.html`, sign in, upload a hero image.
-
-## Customize
-- Design tokens (colors, type, themes): `css/main.css`
-- Invite URL: `js/config.js`
-- Commands: `js/commands-data.js`
-- Pages share the same header/footer markup, so edit navigation in each HTML file.
+## Login notes
+- If Yapin's user/server JSON uses different field names, edit `normalizeUser` / `normalizeServers` in `api/auth/callback.js`.
+- Future settings APIs must call `requireSession()` from `api/_lib/session.js`; the static dashboard page alone is not a security boundary.
 
 ## Security
-- Never put a bot token in front-end files.
-- The admin password lives in memory only while the page is open. For production use Cloudflare Access on `/admin.html` and add rate limiting.
+- Never put a bot token or client secret in front-end files.
+- The admin password lives in browser memory only while the page is open. For production also enable Vercel password protection or an allow-list for `/admin.html`.

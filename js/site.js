@@ -172,7 +172,7 @@
     });
   }
 
-  /* ---------- Hero media: custom R2 upload if present, bundled GIF otherwise ---------- */
+  /* ---------- Hero media: custom uploaded image if present, bundled GIF otherwise ---------- */
   function initHero() {
     var img = $("#heroImg");
     if (!img) return;

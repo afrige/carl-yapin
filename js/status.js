@@ -21,7 +21,7 @@
   function render(res) {
     var html = row("Website", "This page was served successfully.", "ok", "Online");
     if (!res.ok) {
-      html += row("Status API", "Could not reach /api/status. It only runs when the site is deployed with Cloudflare Pages Functions.", "warn", "Unreachable");
+      html += row("Status API", "Could not reach /api/status. It only runs on the deployed site (Vercel).", "warn", "Unreachable");
       html += row("Media storage", "Unknown while the status API is unreachable.", "", "Unknown");
       html += row("Carl bot", "Unknown while the status API is unreachable.", "", "Unknown");
       rows.innerHTML = html;
@@ -31,8 +31,8 @@
     }
     var d = res.data, bot = d.bot || {}, st = d.storage || {};
     html += row("Status API", "Responding.", "ok", "Online");
-    html += st.configured ? (st.ok ? row("Media storage", "Cloudflare R2 binding is reachable (homepage media).", "ok", "Connected") : row("Media storage", "R2 binding exists but a test read failed.", "bad", "Error"))
-                          : row("Media storage", "No R2 binding found. Homepage uploads are unavailable.", "warn", "Not configured");
+    html += st.configured ? (st.ok ? row("Media storage", "Vercel Blob storage is reachable (homepage media).", "ok", "Connected") : row("Media storage", "Blob store is connected but a test read failed.", "bad", "Error"))
+                          : row("Media storage", "No Blob store connected. Homepage uploads are unavailable.", "warn", "Not configured");
     var botDesc, botCls, botLabel;
     if (!bot.configured) { botDesc = "No live status source is connected. Set BOT_STATUS_URL to report real bot status."; botCls = ""; botLabel = "Not connected"; }
     else if (bot.online === true) { botDesc = "Status endpoint responded" + (typeof bot.responseMs === "number" ? " in " + bot.responseMs + " ms" : "") + "."; botCls = "ok"; botLabel = "Online"; }
