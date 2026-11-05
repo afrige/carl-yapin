@@ -20,15 +20,13 @@ The hero shows the image uploaded in `admin.html` if one exists, otherwise `asse
 | Name | Value |
 | --- | --- |
 | `YAPPER_CLIENT_SECRET` | from your Yapin app page (secret) |
-| `YAPPER_TOKEN_URL` | Yapin's token endpoint |
-| `YAPPER_USER_URL` | Yapin's endpoint returning the signed-in user as JSON |
 | `SESSION_SECRET` | long random string: `openssl rand -base64 48` |
 | `ADMIN_PASSWORD` | long, unique |
 | `SITE_URL` | `https://carl-yapin.best` (recommended) |
 | `BOT_STATUS_URL` | optional HTTPS endpoint for live bot status; JSON `{ "online": true, "servers": 0, "users": 0 }` |
 | `YAPPER_SERVERS_URL` | optional, enables the server picker |
 
-   Already defaulted in code (override only if needed): `YAPPER_CLIENT_ID`, `YAPPER_AUTH_URL` (`https://www.yapin.gg/oauth/authorize`), `YAPPER_SCOPES` (`identify`).
+   Already defaulted in code (override only if needed): `YAPPER_CLIENT_ID`, `YAPPER_AUTH_URL` (`https://www.yapin.gg/oauth/authorize`), `YAPPER_SCOPES` (`identify`), `YAPPER_TOKEN_URL` (`https://www.yapin.gg/api/oauth/token`, falls back to `/oauth/token` on 404) and `YAPPER_USER_URL` (`https://www.yapin.gg/api/oauth/me`, falls back to `/oauth/me`). The token/user defaults come from a third-party description of Yapin's login, not official docs; if login fails, check https://www.yapin.gg/developers.
 5. Project → Settings → **Domains** → add `carl-yapin.best` (and `www.carl-yapin.best`). Vercel shows the exact DNS records to set at your registrar. You keep your domain; nothing is transferred.
 6. In your Yapin app settings, set the redirect URL to `https://carl-yapin.best/api/auth/callback`.
 

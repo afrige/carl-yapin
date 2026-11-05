@@ -16,6 +16,13 @@ function normalizeServers(data) {
   return list.slice(0, 25).map((s) => ({ id: String(s.id ?? s.server_id ?? ""), name: String(s.name ?? s.title ?? "").slice(0, 48) })).filter((s) => s.id && s.name);
 }
 
+// Try the main URL; if it 404s and a fallback exists, try the fallback.
+async function fetchWithFallback(url, fallback, init) {
+  const res = await fetch(url, init);
+  if (res.status === 404 && fallback) return fetch(fallback, init);
+  return res;
+}
+
 export async function GET(request) {
   const c = getConfig();
   const origin = siteOrigin(request, c);
@@ -29,7 +36,7 @@ export async function GET(request) {
   if (!code || !state || !pre || pre.state !== state) return fail("failed");
 
   try {
-    const tokenRes = await fetch(c.tokenUrl, {
+    const tokenRes = await fetchWithFallback(c.tokenUrl, c.tokenFallback, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
       body: new URLSearchParams({ grant_type: "authorization_code", code, redirect_uri: redirectUri(request, c), client_id: c.clientId, client_secret: c.clientSecret, code_verifier: pre.verifier })
@@ -39,7 +46,7 @@ export async function GET(request) {
     if (!token) return fail("failed");
 
     const auth = { Authorization: "Bearer " + token, Accept: "application/json" };
-    const userRes = await fetch(c.userUrl, { headers: auth });
+    const userRes = await fetchWithFallback(c.userUrl, c.userFallback, { headers: auth });
     if (!userRes.ok) return fail("failed");
     const user = normalizeUser(await userRes.json());
     if (!user) return fail("failed");
